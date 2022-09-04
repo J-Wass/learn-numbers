@@ -1,0 +1,96 @@
+<html>
+
+<body>
+    <script src="bundle.js"></script>
+    <script>
+        function getRandomInteger(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+        window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: "es" }
+        max = 100
+        number = getRandomInteger(0, max)
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById("esRadio").checked = true
+            document.getElementById("enRadio").checked = false
+            document.getElementById("language").innerText = "Espanol"
+            document.getElementById("targetNumber").innerText = number
+            document.getElementById("results").style = "display:none"
+            
+
+            document.getElementById("enRadio").addEventListener("click", () => {
+                document.getElementById("esRadio").checked = false
+                document.getElementById("enRadio").checked = true
+                document.getElementById("language").innerText = "English"
+                window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: "en" }
+            });
+            document.getElementById("esRadio").addEventListener("click", () => {
+                document.getElementById("esRadio").checked = true
+                document.getElementById("enRadio").checked = false
+                document.getElementById("language").innerText = "Espanol"
+                window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: "es" }
+            });
+            document.getElementById("submit").addEventListener("click", () => {
+                document.getElementById("results").style = ""
+
+                userAnswer = document.getElementById("userAnswer").value.replaceAll("-"," ")
+                expectedAnswer = window.writtenNumber(number).replaceAll("-"," ")
+                document.getElementById("usersAnswer").innerText = userAnswer
+                document.getElementById("actualAnswer").innerText = expectedAnswer
+
+                if (userAnswer == expectedAnswer){
+                    document.getElementById("successOrFail").innerText = "CORRECT"
+                }
+                else{
+                    document.getElementById("successOrFail").innerText = "INCORRECT"
+                }
+                number = getRandomInteger(0, max)
+                document.getElementById("targetNumber").innerText = number
+            });
+            document.getElementById("difficulty").addEventListener("change", () => {
+                selected = document.getElementById("difficulty").selectedIndex
+                switch (selected) {
+                    case 0:
+                        max = 100
+                        break
+                    case 1:
+                        max = 10000
+                        break
+                    case 2:
+                        max = 1000000
+                        break
+                    case 3:
+                        max = 100000000
+                        break
+                    default:
+                        break
+                }
+                number = getRandomInteger(0, max)
+                document.getElementById("targetNumber").innerText = number
+            });
+        })
+
+    </script>
+
+    <input type="radio" id="enRadio" value="en">English</input><br />
+    <input type="radio" id="esRadio" value="es">Espanol</input>
+    <br /><br /><br />
+    Difficulty:
+    <select id="difficulty" multiple>
+        <option value="easy">Easy (0-100)</option>
+        <option value="medium">Medium (0-10,000)</option>
+        <option value="hard">Hard (0-1,000,000)</option>
+        <option value="super hard">Super Hard (0-100,000,000)</option>
+    </select>
+    <br /><br />
+    <p>Write <span id="targetNumber"></span> in <span id="language">Espanol</span></p>
+    <textarea id="userAnswer"></textarea>
+    <button id="submit">Submit Answer</button>
+    <br/><br/><hr/>
+    <div id="results">Result: <span id="successOrFail"></span>
+    <p> Your Answer: <span id="usersAnswer"></span></p>
+    <p> Actual Answer: <span id="actualAnswer"></span></p>
+    </div>
+</body>
+
+</html>
