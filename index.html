@@ -12,31 +12,25 @@
 
         // on window start
         window.addEventListener('DOMContentLoaded', (event) => {
-            document.getElementById("esRadio").checked = true
-            document.getElementById("enRadio").checked = false
             document.getElementById("language").innerText = "Espanol"
             document.getElementById("targetNumber").innerText = number
             document.getElementById("results").style = "display:none"
-            
+
             // listen to change in language selection
-            document.getElementById("enRadio").addEventListener("click", () => {
-                document.getElementById("esRadio").checked = false
-                document.getElementById("enRadio").checked = true
-                document.getElementById("language").innerText = "English"
-                window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: "en" }
-            });
-            document.getElementById("esRadio").addEventListener("click", () => {
-                document.getElementById("esRadio").checked = true
-                document.getElementById("enRadio").checked = false
-                document.getElementById("language").innerText = "Espanol"
-                window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: "es" }
-            });
+            document.getElementById("languages").addEventListener("change", (e) =>{
+                
+                selected_lang_option = document.getElementById("languages").selectedOptions[0]
+                selected_lang = selected_lang_option.text 
+                select_lang_code = selected_lang_option.value
+                document.getElementById("language").innerText = selected_lang
+                window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang:  select_lang_code}
+            })
 
             // listen for enter key when answering
             document.getElementById("userAnswer").addEventListener("keydown", (e) => {
-                
+
                 var key = window.event.keyCode;
-                if (key == 13){ // 13 = enter key code
+                if (key == 13) { // 13 = enter key code
                     e.preventDefault()
                     document.getElementById("submit").click()
                 }
@@ -46,21 +40,24 @@
             document.getElementById("submit").addEventListener("click", () => {
                 document.getElementById("results").style = ""
 
-                userAnswer = document.getElementById("userAnswer").value.replaceAll("-"," ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-                expectedAnswer = window.writtenNumber(number).replaceAll("-"," ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                // normalize to remove accents
+                userAnswer = document.getElementById("userAnswer").value.replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                expectedAnswer = window.writtenNumber(number).replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                
+                // set answers so user can see them
                 document.getElementById("usersAnswer").innerText = userAnswer
                 document.getElementById("actualAnswer").innerText = expectedAnswer
+
+                if (userAnswer == expectedAnswer) {
+                    document.getElementById("successOrFail").innerText = "CORRECT"
+                }
+                else {
+                    document.getElementById("successOrFail").innerText = "INCORRECT"
+                }
 
                 console.log(userAnswer)
                 console.log(expectedAnswer)
                 console.log(userAnswer == expectedAnswer)
-
-                if (userAnswer == expectedAnswer){
-                    document.getElementById("successOrFail").innerText = "CORRECT"
-                }
-                else{
-                    document.getElementById("successOrFail").innerText = "INCORRECT"
-                }
 
                 // set new number
                 document.getElementById("oldNumber").innerText = number
@@ -97,24 +94,40 @@
 
     </script>
 
-    <input type="radio" id="enRadio" value="en">English</input><br />
-    <input type="radio" id="esRadio" value="es">Espanol</input>
-    <br /><br /><br />
-    Difficulty:
-    <select id="difficulty" multiple>
+    <label for="languages">Choose a language:</label>
+    <select name="languages" id="languages">
+        <option value="en">English (Standard)</option>
+        <option value="enIndian">English (India)</option>
+        <option value="pt">Português (Brazil)</option>
+        <option value="ptPT">Português (Portugal)</option>
+        <option value="es">Español/Castillano</option>
+        <option value="fr">Français </option>
+        <option value="eo">Esperanto</option>
+        <option value="vi">Tiếng Việt</option>
+        <option value="ar">العربية الفصحى</option>
+        <option value="az">Азәрбајҹан дили</option>
+        <option value="tr">Türkçe</option>
+        <option value="uk">українська мова</option>
+        <option value="id">Bahasa Indonesia</option>
+        <option value="ru">Русский язык</option>
+    </select>
+
+    <br /><br />
+    <label for="difficulty">Choose a difficulty:</label>
+    <select name="difficulty" id="difficulty">
         <option value="easy">Easy (0-100)</option>
         <option value="medium">Medium (0-10,000)</option>
         <option value="hard">Hard (0-1,000,000)</option>
         <option value="super hard">Super Hard (0-100,000,000)</option>
     </select>
-    <br /><br />
+    <br /><br /> <hr/>
     <p>Write <span id="targetNumber"></span> in <span id="language">Espanol</span></p>
     <textarea id="userAnswer"></textarea>
     <button id="submit">Submit Answer</button>
-    <br/><br/><hr/>
+    <br /><br /><hr />
     <div id="results">Result (<span id="oldNumber"></span>): <span id="successOrFail"></span>
-    <p> &nbsp;&nbsp;&nbsp;Your Answer: <span id="usersAnswer"></span></p>
-    <p> Actual Answer: <span id="actualAnswer"></span></p>
+        <p> &nbsp;&nbsp;&nbsp;Your Answer: <span id="usersAnswer"></span></p>
+        <p> Actual Answer: <span id="actualAnswer"></span></p>
     </div>
 </body>
 
