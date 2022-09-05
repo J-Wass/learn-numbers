@@ -33,7 +33,7 @@
                     break
             }
             number = getRandomInteger(0, max)
-            document.getElementById("targetNumber").innerText = number
+            document.getElementById("targetNumber").innerText = number.toLocaleString("en-US")
         }
 
         function setLanguage() {
@@ -94,7 +94,7 @@
                 // set new number
                 document.getElementById("oldNumber").innerText = number
                 number = getRandomInteger(0, max)
-                document.getElementById("targetNumber").innerText = number
+                document.getElementById("targetNumber").innerText = number.toLocaleString("en-US")
 
                 // reset answer
                 document.getElementById("userAnswer").value = ""
