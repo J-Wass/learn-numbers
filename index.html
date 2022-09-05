@@ -10,6 +10,7 @@
         max = 100
         number = getRandomInteger(0, max)
 
+        // on window start
         window.addEventListener('DOMContentLoaded', (event) => {
             document.getElementById("esRadio").checked = true
             document.getElementById("enRadio").checked = false
@@ -17,7 +18,7 @@
             document.getElementById("targetNumber").innerText = number
             document.getElementById("results").style = "display:none"
             
-
+            // listen to change in language selection
             document.getElementById("enRadio").addEventListener("click", () => {
                 document.getElementById("esRadio").checked = false
                 document.getElementById("enRadio").checked = true
@@ -30,6 +31,18 @@
                 document.getElementById("language").innerText = "Espanol"
                 window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: "es" }
             });
+
+            // listen for enter key when answering
+            document.getElementById("userAnswer").addEventListener("keydown", (e) => {
+                
+                var key = window.event.keyCode;
+                if (key == 13){ // 13 = enter key code
+                    e.preventDefault()
+                    document.getElementById("submit").click()
+                }
+            });
+
+            // listen for submit button to check answer
             document.getElementById("submit").addEventListener("click", () => {
                 document.getElementById("results").style = ""
 
@@ -38,15 +51,27 @@
                 document.getElementById("usersAnswer").innerText = userAnswer
                 document.getElementById("actualAnswer").innerText = expectedAnswer
 
+                console.log(userAnswer)
+                console.log(expectedAnswer)
+                console.log(userAnswer == expectedAnswer)
+
                 if (userAnswer == expectedAnswer){
                     document.getElementById("successOrFail").innerText = "CORRECT"
                 }
                 else{
                     document.getElementById("successOrFail").innerText = "INCORRECT"
                 }
+
+                // set new number
+                document.getElementById("oldNumber").innerText = number
                 number = getRandomInteger(0, max)
                 document.getElementById("targetNumber").innerText = number
+
+                // reset answer
+                document.getElementById("userAnswer").value = ""
             });
+
+            // change the difficulty
             document.getElementById("difficulty").addEventListener("change", () => {
                 selected = document.getElementById("difficulty").selectedIndex
                 switch (selected) {
@@ -87,7 +112,7 @@
     <textarea id="userAnswer"></textarea>
     <button id="submit">Submit Answer</button>
     <br/><br/><hr/>
-    <div id="results">Result: <span id="successOrFail"></span>
+    <div id="results">Result (<span id="oldNumber"></span>): <span id="successOrFail"></span>
     <p> &nbsp;&nbsp;&nbsp;Your Answer: <span id="usersAnswer"></span></p>
     <p> Actual Answer: <span id="actualAnswer"></span></p>
     </div>
