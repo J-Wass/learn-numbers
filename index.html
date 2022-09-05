@@ -14,20 +14,46 @@
         max = 100
         number = getRandomInteger(0, max)
 
+        function setDifficulty() {
+            selected = document.getElementById("difficulty").selectedIndex
+            switch (selected) {
+                case 0:
+                    max = 10
+                    break
+                case 1:
+                    max = 100
+                    break
+                case 2:
+                    max = 100000
+                    break
+                case 3:
+                    max = 999999999
+                    break
+                default:
+                    break
+            }
+            number = getRandomInteger(0, max)
+            document.getElementById("targetNumber").innerText = number
+        }
+
+        function setLanguage() {
+            selected_lang_option = document.getElementById("languages").selectedOptions[0]
+            selected_lang = selected_lang_option.text
+            select_lang_code = selected_lang_option.value
+            document.getElementById("language").innerText = selected_lang
+            window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: select_lang_code }
+        }
+
         // on window start
         window.addEventListener('DOMContentLoaded', (event) => {
-            document.getElementById("language").innerText = "Español"
-            document.getElementById("targetNumber").innerText = number
+            setDifficulty()
+            setLanguage()
+
             document.getElementById("results").style = "display:none"
 
             // listen to change in language selection
-            document.getElementById("languages").addEventListener("change", (e) => {
-
-                selected_lang_option = document.getElementById("languages").selectedOptions[0]
-                selected_lang = selected_lang_option.text
-                select_lang_code = selected_lang_option.value
-                document.getElementById("language").innerText = selected_lang
-                window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: select_lang_code }
+            document.getElementById("languages").addEventListener("change", () => {
+                setLanguage()
             })
 
             // listen for enter key when answering
@@ -54,11 +80,11 @@
 
                 if (userAnswer == expectedAnswer) {
                     document.getElementById("successOrFail").innerText = "CORRECT"
-                    document.getElementById("successOrFail").style="color:green"
+                    document.getElementById("successOrFail").style = "color:green"
                 }
                 else {
                     document.getElementById("successOrFail").innerText = "INCORRECT"
-                    document.getElementById("successOrFail").style="color:red"
+                    document.getElementById("successOrFail").style = "color:red"
                 }
 
                 console.log(userAnswer)
@@ -76,25 +102,7 @@
 
             // change the difficulty
             document.getElementById("difficulty").addEventListener("change", () => {
-                selected = document.getElementById("difficulty").selectedIndex
-                switch (selected) {
-                    case 0:
-                        max = 100
-                        break
-                    case 1:
-                        max = 10000
-                        break
-                    case 2:
-                        max = 1000000
-                        break
-                    case 3:
-                        max = 999999999
-                        break
-                    default:
-                        break
-                }
-                number = getRandomInteger(0, max)
-                document.getElementById("targetNumber").innerText = number
+                setDifficulty()
             });
         })
 
@@ -121,10 +129,10 @@
     <br /><br />
     <label for="difficulty">Choose a difficulty:</label>
     <select name="difficulty" id="difficulty">
-        <option value="easy">Easy (0-100)</option>
-        <option value="medium">Medium (0-10,000)</option>
-        <option value="hard">Hard (0-1,000,000)</option>
-        <option value="super hard">Super Hard (0-999,999,999)</option>
+        <option value="easy">Basic (0-10)</option>
+        <option value="medium">Easy (0-100)</option>
+        <option value="hard">Medium (0-100,000)</option>
+        <option value="super hard">Hard (0-999,999,999)</option>
     </select>
     <br /><br />
     <hr />
@@ -135,12 +143,12 @@
     <hr />
     <div id="results">
         <span id="successOrFail"></span> (<span id="oldNumber"></span>)
-        
+
         <p> Actual Answer: <span id="actualAnswer"></span></p>
         <p> &nbsp;&nbsp;&nbsp;Your Answer: <span id="usersAnswer"></span></p>
     </div>
 </body>
-<br/>
+<br />
 <a target="_blank" href="https://github.com/J-Wass/learn-numbers">Github</a>
 
 </html>
