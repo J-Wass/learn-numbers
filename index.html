@@ -71,8 +71,8 @@
                 document.getElementById("results").style = ""
 
                 // normalize to remove accents
-                userAnswer = document.getElementById("userAnswer").value.toLowerCase().replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-                expectedAnswer = window.writtenNumber(number).toLowerCase().replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                userAnswer = document.getElementById("userAnswer").value.trim().toLowerCase().replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                expectedAnswer = window.writtenNumber(number).trim().toLowerCase().replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
 
                 // set answers so user can see them
                 document.getElementById("usersAnswer").innerText = userAnswer
