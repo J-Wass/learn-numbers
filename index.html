@@ -5,7 +5,7 @@
 </head>
 
 <body>
-    <script src="bundle.js"></script>
+    <script src="n2words.js"></script>
     <script>
         function normalizeAnswer(answer){
             return answer.trim().toLowerCase().replaceAll(",", "").replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
@@ -13,9 +13,9 @@
         function getRandomInteger(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
-        window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: "es" }
         max = 100
         number = getRandomInteger(0, max)
+        language = "es"
 
         function setDifficulty() {
             selected = document.getElementById("difficulty").selectedIndex
@@ -44,7 +44,7 @@
             selected_lang = selected_lang_option.text
             select_lang_code = selected_lang_option.value
             document.getElementById("language").innerText = selected_lang
-            window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: select_lang_code }
+            language = select_lang_code
         }
 
         // on window start
@@ -75,7 +75,7 @@
 
                 // normalize to remove accents
                 userAnswer = normalizeAnswer(document.getElementById("userAnswer").value)
-                expectedAnswer = normalizeAnswer(window.writtenNumber(number))
+                expectedAnswer = normalizeAnswer(n2words(number, {lang: language}))
 
                 // set answers so user can see them
                 document.getElementById("usersAnswer").innerText = userAnswer
@@ -95,7 +95,7 @@
                 console.log(userAnswer == expectedAnswer)
 
                 // set new number
-                document.getElementById("oldNumber").innerText = number
+                document.getElementById("oldNumber").innerText = number.toLocaleString("en-US")
                 number = getRandomInteger(0, max)
                 document.getElementById("targetNumber").innerText = number.toLocaleString("en-US")
 
@@ -113,20 +113,32 @@
 
     <label for="languages">Choose a language:</label>
     <select name="languages" id="languages">
-        <option value="en">English (Standard)</option>
-        <option value="enIndian">English (India)</option>
-        <option value="pt">Português (Brazil)</option>
-        <option value="ptPT">Português (Portugal)</option>
+        <option value="en">English</option>
+        <option value="pt">Português</option>
         <option value="es">Español</option>
         <option value="fr">Français </option>
-        <option value="eo">Esperanto</option>
         <option value="vi">Tiếng Việt</option>
         <option value="ar">العربية الفصحى</option>
-        <option value="az">Азәрбајҹан дили</option>
         <option value="tr">Türkçe</option>
         <option value="uk">українська мова</option>
         <option value="id">Bahasa Indonesia</option>
         <option value="ru">Русский язык</option>
+        <option value="cz">čeština</option>
+        <option value="dk">dansk</option>
+        <option value="de">Deutsch</option>
+        <option value="fa">فارسی</option>
+        <option value="he">עברית</option>
+        <option value="hr">hrvatski </option>
+        <option value="hu">magyar</option>
+        <option value="it">italiano</option>
+        <option value="ko">한국어</option>
+        <option value="lt">lietuvių kalba</option>
+        <option value="lv">latviešu valoda</option>
+        <option value="nl">Nederlands</option>
+        <option value="no">norsk</option>
+        <option value="pl">polski</option>
+        <option value="sr">srpski </option>
+        <option value="zh">国语</option>
     </select>
 
     <br /><br />
