@@ -7,6 +7,9 @@
 <body>
     <script src="bundle.js"></script>
     <script>
+        function normalizeAnswer(answer){
+            return answer.trim().toLowerCase().replaceAll(",", "").replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+        }
         function getRandomInteger(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
@@ -71,8 +74,8 @@
                 document.getElementById("results").style = ""
 
                 // normalize to remove accents
-                userAnswer = document.getElementById("userAnswer").value.trim().toLowerCase().replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
-                expectedAnswer = window.writtenNumber(number).trim().toLowerCase().replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+                userAnswer = normalizeAnswer(document.getElementById("userAnswer").value)
+                expectedAnswer = normalizeAnswer(window.writtenNumber(number))
 
                 // set answers so user can see them
                 document.getElementById("usersAnswer").innerText = userAnswer
