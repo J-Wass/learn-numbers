@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -13,9 +14,6 @@
         function getRandomInteger(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
-        max = 100
-        number = getRandomInteger(0, max)
-        language = "es"
 
         function setDifficulty() {
             selected = document.getElementById("difficulty").selectedIndex
@@ -43,12 +41,14 @@
             selected_lang_option = document.getElementById("languages").selectedOptions[0]
             selected_lang = selected_lang_option.text
             select_lang_code = selected_lang_option.value
+
             document.getElementById("language").innerText = selected_lang
             language = select_lang_code
         }
 
         // on window start
         window.addEventListener('DOMContentLoaded', (event) => {
+
             setDifficulty()
             setLanguage()
 
