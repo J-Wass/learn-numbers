@@ -8,6 +8,7 @@
 
 <body>
     <script src="n2words.js"></script>
+    <script src="written-number.js"></script>
     <script>
         function normalizeAnswer(answer){
             return answer.trim().toLowerCase().replaceAll(",", "").replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
@@ -74,9 +75,19 @@
             document.getElementById("submit").addEventListener("click", () => {
                 document.getElementById("results").style = ""
 
-                // normalize to remove accents
+                // Use both written number and n2words to translate.
                 userAnswer = normalizeAnswer(document.getElementById("userAnswer").value)
-                expectedAnswer = normalizeAnswer(n2words(number, {lang: language}))
+                expectedAnswer = ""
+                try{
+                    window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: language }
+                    expectedAnswer = normalizeAnswer(window.writtenNumber(number))
+                    console.log("Using writtenNumber engine")
+                }
+                catch (error){
+                    expectedAnswer = normalizeAnswer(n2words(number, {lang: language}))
+                    console.log("Using n2words engine")
+                }
+                
 
                 // set answers so user can see them
                 document.getElementById("usersAnswer").innerText = userAnswer
@@ -129,7 +140,7 @@
         <option value="de">Deutsch</option>
         <option value="fa">فارسی</option>
         <option value="he">עברית</option>
-        <option value="hr">hrvatski </option>
+        <option value="hr">hrvatski</option>
         <option value="hu">magyar</option>
         <option value="it">italiano</option>
         <option value="ko">한국어</option>
@@ -140,6 +151,9 @@
         <option value="pl">polski</option>
         <option value="sr">srpski </option>
         <option value="zh">国语</option>
+        <option value="eo">Esperanto</option>
+        <option value="az">Азәрбајҹан дили</option>
+        <option value="enIndian">English (India)</option>
     </select>
 
     <br /><br />
