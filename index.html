@@ -11,7 +11,14 @@
     <script src="written-number.js"></script>
     <script>
         function normalizeAnswer(answer){
-            return answer.trim().toLowerCase().replaceAll(",", "").replaceAll("-", " ").normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+            strictAccents = document.getElementById("accents").checked
+
+            normalized = answer.trim().toLowerCase().replaceAll(",", "").replaceAll("-", " ")
+            if (strictAccents){
+                return normalized
+            }
+
+            return normalized.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
         }
         function getRandomInteger(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
@@ -78,14 +85,14 @@
                 // Use both written number and n2words to translate.
                 userAnswer = normalizeAnswer(document.getElementById("userAnswer").value)
                 expectedAnswer = ""
+                console.log(language)
                 try{
-                    window.writtenNumber.defaults = { noAnd: false, alternativeBase: null, lang: language }
-                    expectedAnswer = normalizeAnswer(window.writtenNumber(number))
-                    console.log("Using writtenNumber engine")
-                }
-                catch (error){
                     expectedAnswer = normalizeAnswer(n2words(number, {lang: language}))
                     console.log("Using n2words engine")
+                }
+                catch (error){
+                    expectedAnswer = normalizeAnswer(window.writtenNumber(number, {lang: language}))
+                    console.log("Using writtenNumber engine")
                 }
                 
 
@@ -122,6 +129,8 @@
         })
 
     </script>
+    <label for="accents">Require áccent markers?</label>
+    <input type="checkbox" id="accents" name="accents"><br /><br />
 
     <label for="languages">Choose a language:</label>
     <select name="languages" id="languages">
@@ -147,10 +156,10 @@
         <option value="lt">lietuvių kalba</option>
         <option value="lv">latviešu valoda</option>
         <option value="nl">Nederlands</option>
-        <option value="no">norsk</option>
+        <option value="no">norsk bokmå</option>
         <option value="pl">polski</option>
         <option value="sr">srpski </option>
-        <option value="zh">国语</option>
+        <option value="zh">国语 (sino)</option>
         <option value="eo">Esperanto</option>
         <option value="az">Азәрбајҹан дили</option>
         <option value="enIndian">English (India)</option>
